@@ -59,12 +59,21 @@ def userFav(f_name, l_name, birthday) :
         ['#', '@', '$', '&']) + birth_year[1:3]
 
     counter = [main(password1),main(password2),main(password3),main(password4),main(password5),main(password6)]
-
+    passwords = [password1,password2,password3,password4,password5,password6]
+    securePassword =  []
+    base_counter = 0
+    i = -1
     for count in counter :
+        i += 1
         if not count :
-            return password1
+            base_counter += 1
+            securePassword.append(passwords[i])
         else :
-            return ""
+            continue
+    if base_counter != 0 :
+        return random.choice(securePassword)
+    else :
+        return ""
 
 def systemPass():
     # maximum length of password needed
