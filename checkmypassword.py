@@ -125,18 +125,68 @@ def systemPass():
 
 
 
+#this function will show the strength of password
+def password_check(password) :
+
+    # calculating the length
+    length_error = len(password) < 8
+
+    # searching for digits
+    digit_error = re.search(r"\d", password) is None
+
+    # searching for uppercase
+    uppercase_error = re.search(r"[A-Z]", password) is None
+
+    # searching for lowercase
+    lowercase_error = re.search(r"[a-z]", password) is None
+
+    # searching for symbols
+    symbol_error = re.search(r"[ @!#$%&'()*+,-./[\\\]^_`{|}~"+r'"]', password) is None
+
+    # overall result
+    password_ok = not ( length_error or digit_error or uppercase_error or lowercase_error or symbol_error )
+
+    return {
+        'password_ok' : password_ok,
+        'length_error' : length_error,
+        'digit_error' : digit_error,
+        'uppercase_error' : uppercase_error,
+        'lowercase_error' : lowercase_error,
+        'symbol_error' : symbol_error,
+    }
 
 
 #testing Section
 
 f_name = "dhruv"
-l_name = "patel"
+l_name = "prajapati"
 birthday = "22/10/2001"
 
 userEnteredPass = input("Enter any password : ")
 hackedCount = main(userEnteredPass) #it will check for the user entered password
 if not hackedCount :
     print(userEnteredPass + " Is Hacked for " + str(hackedCount) + " Times"  )
+    error = password_check(userEnteredPass)
+    false_count = 0
+    error_names = []
+    true_count = 0
+    print_status = 0
+    for i in error:
+        if error[i] and i == "password_ok":
+            print("Excellent password")
+            print_status = 1
+        elif not error[i]:
+            true_count += 1
+        else :
+            false_count +=1
+            error_names.append(i)
+    if print_status == 0 :
+        if (false_count < 3):
+            print("Better password")
+            print(error_names)
+        else:
+            print("OK password")
+            print(error_names)
 else :
     altPass = userFav(f_name, l_name, birthday)
     if altPass == "" :
