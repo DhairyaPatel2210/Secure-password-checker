@@ -1,8 +1,11 @@
+from tkinter import *
+from tkinter import ttk
 import requests
 import sys
 import hashlib
 import random
 import array
+import re
 
 #first of all we have to create a function which will give us response from API(haveieverbeenpwnedAPI)
 
@@ -34,7 +37,6 @@ def counter(hashes,tail):
 def main(password):
     count = hash_converter(password)
     return count
-
 
 #this function will generate 6 passwords and will check whether it have been hacked or not
 #and will return back one of the password if it is not found in data breach
@@ -132,8 +134,6 @@ def systemPass():
     # returning out password
     return password
 
-
-
 #this function will show the strength of password
 def password_check(password) :
 
@@ -171,46 +171,139 @@ f_name = "dhruv"
 l_name = "prajapati"
 birthday = "22/10/2001"
 
-userEnteredPass = input("Enter any password : ")
-hackedCount = main(userEnteredPass) #it will check for the user entered password
-if not hackedCount :
-    print(userEnteredPass + " Is Hacked for " + str(hackedCount) + " Times"  )
-    error = password_check(userEnteredPass)
-    false_count = 0
-    error_names = []
-    true_count = 0
-    print_status = 0
-    for i in error:
-        if error[i] and i == "password_ok":
-            print("Excellent password")
-            print_status = 1
-        elif not error[i]:
-            true_count += 1
-        else :
-            false_count +=1
-            error_names.append(i)
-    if print_status == 0 :
-        if (false_count < 3):
-            print("Better password")
-            print(error_names)
-        else:
-            print("OK password")
-            print(error_names)
-else :
-    altPass = userFav(f_name, l_name, birthday)
-    if altPass == "" :
-        sysPass = systemPass()
-        print("Our recommended password for you is given below ")
-        print(sysPass)
+
+def process():
+    userEnteredPass = password_entry.get()
+    hackedCount = main(userEnteredPass)                           # Checking process begins
+    if not hackedCount : 
+        yes_button.place_forget()  
+        no_button.place_forget()
+        right_image_label.config(image = right_image)
+        strength_label.place(relx=0.78,y=665,anchor = CENTER) 
+        hacked_label.place(relx=0.78,y=630,anchor = CENTER)                   
+        hacked_label.config(text= "Your Password is just Fine!",font=('MontSerrat',12,'bold'),foreground="white") 
+
+        error = password_check(userEnteredPass)
+        false_count = 0
+        error_names = []
+        true_count = 0
+        print_status = 0
+        for i in error:
+            if error[i] and i == "password_ok":
+                strength_label.config(text="Password Strength: Strong")
+                print_status = 1
+            elif not error[i]:
+                true_count += 1
+            else :
+                false_count +=1
+                error_names.append(i)
+        if print_status == 0 :
+            if (false_count < 3):
+                strength_label.config(text = "Password Strength: Medium")
+                print(error_names)
+            else:
+                strength_label.config(text = "Password Strength: Weak")
+                print(error_names)
     else :
-        print("Our recommended password for you is given below ")
-        print(altPass)
+        yes_button.place(x=735,y=665)
+        no_button.place(x=845,y=665)
+        hacked_label.place(relx=0.78,y=600,anchor = CENTER)
+        strength_label.place(relx=0.78,y=625,anchor = CENTER)
+        hacked_label.config(text = f"Your Password has been hacked {hackedCount} times!",foreground="#e04f5f",font=('MontSerrat',10,'normal'))
+        strength_label.config(text = "Do you want to generate a Strong Password?")
+        right_image_label.config(image = wrong_image)
+
+        altPass = userFav(f_name, l_name, birthday)
+        if altPass == "" :
+            sysPass = systemPass()
+            print("Our recommended password for you is given below ")
+            print(sysPass)
+        else :
+            print("Our recommended password for you is given below ")
+            print(altPass)
+    return
+
+tab_memory =[1,0]
+
+def tab_logic(tab_key):
+
+    if tab_key == "pass":
+        if tab_memory[0] == 1:
+            pass
+        else:
+            tab_memory[0] = 1
+            tab_memory[1] = 0
+    else:
+        if tab_memory[1] == 1:   
+            pass
+        else:
+            tab_memory[1] = 1
+            tab_memory[0] = 0
+
+    if tab_memory[0] == 1:
+        password_button.config(image=password_on_image)
+    else:
+        password_button.config(image=password_off_image)
+
+    if tab_memory[1] == 1:
+        generate_button.config(image=generate_on_image)
+    else:
+        generate_button.config(image=generate_off_image)
 
 
+windows = Tk()         
 
+app_image = PhotoImage(file="C:/Users/D_Gamer/Downloads/BackGround.png")      # BackGround Image
+checkbutton_image = PhotoImage(file="C:/Users/D_Gamer/Downloads/Check_Button.png")
+password_on_image = PhotoImage(file="C:/Users/D_Gamer/Downloads/Password_On.png")
+password_off_image =  PhotoImage(file="C:/Users/D_Gamer/Downloads/Password_Off.png")
+generate_on_image = PhotoImage(file="C:/Users/D_Gamer/Downloads/Generate_On.png")
+generate_off_image = PhotoImage(file="C:/Users/D_Gamer/Downloads/Generate_Off.png")
+right_image = PhotoImage(file="C:/Users/D_Gamer/Downloads/Right_Circle.png")
+wrong_image = PhotoImage(file="C:/Users/D_Gamer/Downloads/Wrong_Circle.png")
+appicon = PhotoImage(file="C:/Users/D_Gamer/Downloads/Icon.png")
+yes_image = PhotoImage(file="C:/Users/D_Gamer/Downloads/Yes_Button.png")
+no_image = PhotoImage(file="C:/Users/D_Gamer/Downloads/No_Button.png")
 
+windows.iconphoto(False,appicon)                                        # Create Scene
+windows.title('Password Checker')                                       # Assign Title
+windows.geometry('1080x720')                                            # Resolution of Scene
+windows.wm_iconphoto(False,appicon)
 
+canvas = Canvas(windows,height=720,width=1080)                          # Canvas
+canvas.pack()
 
+canvas.create_image(0,0,image=app_image,anchor=NW)            # BackGround Image Set
 
+password_entry = Entry(canvas,bg="#243142",borderwidth=0,width=23,font=('MontSerrat',14,'bold'),fg="white")                              # Entry Widget to get value from User
+password_entry.focus()
+password_entry.place(x=700,y=285) 
 
+hacked_label = ttk.Label(canvas,text="",foreground="white",background="#243142",borderwidth=0,font=('MontSerrat',12,'bold'))
+# hacked_label.place(relx=0.78,y=600,anchor = CENTER)
+# hacked_label.place(relx=0.78,y=630,anchor = CENTER)
 
+strength_label = ttk.Label(canvas,text="",foreground="white",background="#243142",borderwidth=0,font=('MontSerrat',10,'bold'))
+# strength_label.place(relx=0.78,y=625,anchor = CENTER)
+# strength_label.place(relx=0.78,y=665,anchor = CENTER)
+
+right_image_label = Label(canvas,image = "",bg="#243142")
+right_image_label.place(x=795,y=485)
+
+check_button = Button(canvas,image=checkbutton_image,borderwidth=0,bg="#243142",command=process)
+# Button to submit data
+check_button.place(x=670, y=348)
+
+password_button = Button(canvas,image=password_on_image,command=lambda : tab_logic("pass"),borderwidth=0,bg="#243142")
+password_button.place(x=815,y=42)
+
+generate_button = Button(canvas,image=generate_off_image,command=lambda : tab_logic("hii"),borderwidth=0,bg="#243142")
+generate_button.place(x=923,y=42)
+
+yes_button = Button(canvas,image=yes_image,borderwidth=0,bg="#243142")
+# yes_button.place(x=735,y=665)
+
+no_button = Button(canvas,image=no_image,borderwidth=0,bg="#243142")
+# no_button.place(x=845,y=665)
+
+windows.mainloop()
