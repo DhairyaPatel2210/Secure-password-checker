@@ -18,3 +18,11 @@ DGamer007 (Software GUI, Tkinter developer)
 Pns00911 (Software GUI, Tkinter developer, Software Design(using Adobe XD))
 
 
+*Why use Password Checker?
+
+
+=>Users get easy-to-remember, user-related and uncompromised passwords.
+
+=>We ensure the privacy of user passwords and details.
+
+=>Users’ details will not be sent to any server, it will be kept completely local.
