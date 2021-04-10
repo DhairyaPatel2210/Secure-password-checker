@@ -1,7 +1,7 @@
 # Most-secure-password-checker
 It will check your password was hacked or not and if is it so then it will suggest password that can be remembered easily and also provide option to generate random password
 
-Contributors :
+# Contributors :
 
 Backend developers :
 
@@ -18,7 +18,7 @@ DGamer007 (Software GUI, Tkinter developer)
 Pns00911 (Software GUI, Tkinter developer, Software Design(using Adobe XD))
 
 
-*Why use Password Checker?
+# Why use Password Checker?
 
 
 =>Users get easy-to-remember, user-related and uncompromised passwords.
@@ -28,7 +28,7 @@ Pns00911 (Software GUI, Tkinter developer, Software Design(using Adobe XD))
 =>Users’ details will not be sent to any server, it will be kept completely local.
 
 
-Technical Description 
+# Technical Description 
 
 The Password Checker will check your password whether it is hacked or not, without sending it to any servers. So basically, it will check your password locally. To understand the process just follow this documentation;
 First of all, we will convert your password to SHA-1 encryption (160-bit encryption), Then we will extract the first 5 characters from the encryption and will send it to API. 
